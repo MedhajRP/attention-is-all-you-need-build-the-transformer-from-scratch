@@ -775,8 +775,38 @@ def init_embedding_and_projection_parameters(
         "output_projection": output_projection,
     }
 
-# Step 55 - collect_model_parameters_into_list (not yet solved)
-# TODO: implement
+# Step 55 - collect_model_parameters_into_list
+import torch
+
+def collect_model_parameters_into_list(
+    encoder_layer_params,
+    decoder_layer_params,
+    embedding_params
+):
+    # Keep track of tensor identities so tied parameters are added only once.
+    parameters = []
+    seen = set()
+
+    def add_tensor(tensor):
+        if id(tensor) not in seen:
+            seen.add(id(tensor))
+            parameters.append(tensor)
+
+    # Encoder parameters come first, preserving layer and dict order.
+    for layer_params in encoder_layer_params:
+        for tensor in layer_params.values():
+            add_tensor(tensor)
+
+    # Decoder parameters come next, again preserving insertion order.
+    for layer_params in decoder_layer_params:
+        for tensor in layer_params.values():
+            add_tensor(tensor)
+
+    # Embedding and projection parameters come last.
+    for tensor in embedding_params.values():
+        add_tensor(tensor)
+
+    return parameters
 
 # Step 56 - shift_targets_right_with_start_token (not yet solved)
 # TODO: implement
