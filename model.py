@@ -127,8 +127,12 @@ def build_causal_mask(seq_len):
     # Create a lower-triangular mask so each position can attend only to itself and earlier positions.
     return torch.tril(torch.ones((seq_len, seq_len), dtype=torch.bool)).unsqueeze(0).unsqueeze(0)
 
-# Step 16 - combine_padding_and_causal_masks (not yet solved)
-# TODO: implement
+# Step 16 - combine_padding_and_causal_masks
+import torch
+
+def combine_padding_and_causal_masks(padding_mask, causal_mask):
+    # Keep positions that satisfy both the padding and causal attention constraints.
+    return padding_mask & causal_mask
 
 # Step 17 - compute_raw_attention_scores (not yet solved)
 # TODO: implement
