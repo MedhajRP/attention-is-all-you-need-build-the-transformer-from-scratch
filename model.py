@@ -978,8 +978,58 @@ def apply_adam_bias_correction(m_t, v_t, beta1, beta2, step):
 
     return m_hat, v_hat
 
-# Step 69 - apply_adam_step_to_all_parameters (not yet solved)
-# TODO: implement
+# Step 69 - apply_adam_step_to_all_parameters
+import torch
+
+def apply_adam_step_to_all_parameters(
+    parameter_list,
+    optimizer_state,
+    learning_rate,
+    beta1=0.9,
+    beta2=0.98,
+    epsilon=1e-9
+):
+    # Increment the global Adam step.
+    optimizer_state["t"] += 1
+    step = optimizer_state["t"]
+
+    for i, param in enumerate(parameter_list):
+        # Skip parameters that did not receive a gradient.
+        if param.grad is None:
+            continue
+
+        grad = param.grad
+
+        # Update first and second moments.
+        optimizer_state["m"][i] = update_adam_first_moment(
+            optimizer_state["m"][i],
+            grad,
+            beta1
+        )
+
+        optimizer_state["v"][i] = update_adam_second_moment(
+            optimizer_state["v"][i],
+            grad,
+            beta2
+        )
+
+        # Bias correction.
+        m_hat, v_hat = apply_adam_bias_correction(
+            optimizer_state["m"][i],
+            optimizer_state["v"][i],
+            beta1,
+            beta2,
+            step
+        )
+
+        # Adam update.
+        delta = learning_rate * m_hat / (torch.sqrt(v_hat) + epsilon)
+
+        # Update parameter in-place without building an autograd graph.
+        with torch.no_grad():
+            param -= delta
+
+    return optimizer_state
 
 # Step 70 - zero_all_parameter_gradients (not yet solved)
 # TODO: implement
