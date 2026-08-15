@@ -808,8 +808,20 @@ def collect_model_parameters_into_list(
 
     return parameters
 
-# Step 56 - shift_targets_right_with_start_token (not yet solved)
-# TODO: implement
+# Step 56 - shift_targets_right_with_start_token
+import torch
+
+def shift_targets_right_with_start_token(target_ids, start_token_id):
+    # Create the shifted tensor while preserving the input dtype and device.
+    shifted = torch.empty_like(target_ids)
+
+    # Put the start token at the first position of every sequence.
+    shifted[:, 0] = start_token_id
+
+    # Move every target token one position to the right.
+    shifted[:, 1:] = target_ids[:, :-1]
+
+    return shifted
 
 # Step 57 - compute_noam_learning_rate (not yet solved)
 # TODO: implement
