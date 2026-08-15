@@ -158,8 +158,15 @@ def mask_attention_scores_with_neg_inf(scores, mask):
     # Replace blocked positions while keeping the original scores elsewhere.
     return scores.masked_fill(~mask, float('-inf'))
 
-# Step 20 - softmax_attention_weights (not yet solved)
-# TODO: implement
+# Step 20 - softmax_attention_weights
+import torch
+
+def softmax_attention_weights(masked_scores):
+    # Replace fully masked rows with zeros so softmax does not produce NaNs.
+    all_masked = torch.isneginf(masked_scores).all(dim=-1, keepdim=True)
+    safe_scores = masked_scores.masked_fill(all_masked, 0.0)
+    weights = torch.softmax(safe_scores, dim=-1)
+    return weights.masked_fill(all_masked, 0.0)
 
 # Step 21 - apply_attention_weights_to_values (not yet solved)
 # TODO: implement
