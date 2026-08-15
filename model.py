@@ -294,8 +294,12 @@ def apply_ffn_first_linear_and_relu(x, w1, b1):
     # Project the input into the feed-forward dimension and apply ReLU.
     return torch.relu(x @ w1 + b1)
 
-# Step 33 - apply_ffn_second_linear (not yet solved)
-# TODO: implement
+# Step 33 - apply_ffn_second_linear
+import torch
+
+def apply_ffn_second_linear(hidden, w2, b2):
+    # Project the hidden activations back to the model dimension.
+    return hidden @ w2 + b2
 
 # Step 34 - position_wise_feed_forward_network (not yet solved)
 # TODO: implement
