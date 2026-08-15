@@ -933,8 +933,21 @@ def compute_token_accuracy_ignoring_pad(
 
     return correct.sum().to(dtype=log_probabilities.dtype) / non_pad_count
 
-# Step 64 - initialize_adam_optimizer_state (not yet solved)
-# TODO: implement
+# Step 64 - initialize_adam_optimizer_state
+import torch
+
+def initialize_adam_optimizer_state(parameter_list):
+    """Allocate Adam m, v zero buffers and a step counter t=0."""
+    # Create gradient-free zero buffers matching every parameter.
+    m = [torch.zeros_like(parameter) for parameter in parameter_list]
+    v = [torch.zeros_like(parameter) for parameter in parameter_list]
+
+    # Adam starts with no update steps completed.
+    return {
+        "m": m,
+        "v": v,
+        "t": 0,
+    }
 
 # Step 65 - update_adam_first_moment (not yet solved)
 # TODO: implement
