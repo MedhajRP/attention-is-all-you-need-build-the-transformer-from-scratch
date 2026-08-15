@@ -735,8 +735,45 @@ def init_decoder_layer_parameters(d_model, num_heads, d_ff):
         "ffn_beta": ffn_beta,
     }
 
-# Step 54 - init_embedding_and_projection_parameters (not yet solved)
-# TODO: implement
+# Step 54 - init_embedding_and_projection_parameters
+import torch
+
+def init_embedding_and_projection_parameters(
+    vocab_size, d_model, tie_weights=True
+):
+    """Allocate src/tgt embeddings and output projection (optionally tied)."""
+    # Create independent source and target embedding matrices.
+    src_embedding = torch.empty(
+        vocab_size, d_model,
+        dtype=torch.float32,
+        requires_grad=True
+    )
+    tgt_embedding = torch.empty(
+        vocab_size, d_model,
+        dtype=torch.float32,
+        requires_grad=True
+    )
+
+    # Initialize both embedding matrices with Xavier initialization.
+    torch.nn.init.xavier_uniform_(src_embedding)
+    torch.nn.init.xavier_uniform_(tgt_embedding)
+
+    # Tie the output projection directly to the target embedding when requested.
+    if tie_weights:
+        output_projection = tgt_embedding
+    else:
+        output_projection = torch.empty(
+            vocab_size, d_model,
+            dtype=torch.float32,
+            requires_grad=True
+        )
+        torch.nn.init.xavier_uniform_(output_projection)
+
+    return {
+        "src_embedding": src_embedding,
+        "tgt_embedding": tgt_embedding,
+        "output_projection": output_projection,
+    }
 
 # Step 55 - collect_model_parameters_into_list (not yet solved)
 # TODO: implement
