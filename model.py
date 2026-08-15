@@ -150,8 +150,13 @@ def scale_attention_scores(scores, d_k):
     # Scale the scores by the square root of the key dimension.
     return scores / math.sqrt(d_k)
 
-# Step 19 - mask_attention_scores_with_neg_inf (not yet solved)
-# TODO: implement
+# Step 19 - mask_attention_scores_with_neg_inf
+import torch
+
+def mask_attention_scores_with_neg_inf(scores, mask):
+    """Set entries of scores where mask is False to -inf."""
+    # Replace blocked positions while keeping the original scores elsewhere.
+    return scores.masked_fill(~mask, float('-inf'))
 
 # Step 20 - softmax_attention_weights (not yet solved)
 # TODO: implement
