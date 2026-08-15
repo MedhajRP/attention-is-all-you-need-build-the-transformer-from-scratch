@@ -477,8 +477,20 @@ def assemble_decoder_layer(y, encoder_output, layer_params, num_heads, src_mask,
 
     return y
 
-# Step 47 - stack_decoder_layers (not yet solved)
-# TODO: implement
+# Step 47 - stack_decoder_layers
+def stack_decoder_layers(y, encoder_output, decoder_layer_params_list, num_heads, src_mask, tgt_mask):
+    # Pass the target hidden state through each decoder layer in sequence.
+    hidden = y
+    for layer_params in decoder_layer_params_list:
+        hidden = assemble_decoder_layer(
+            hidden,
+            encoder_output,
+            layer_params,
+            num_heads,
+            src_mask,
+            tgt_mask,
+        )
+    return hidden
 
 # Step 48 - apply_final_output_projection (not yet solved)
 # TODO: implement
