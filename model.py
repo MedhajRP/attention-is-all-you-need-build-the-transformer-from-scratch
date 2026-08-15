@@ -142,8 +142,13 @@ def compute_raw_attention_scores(query, key):
     # Transpose only the last two dimensions of key before matrix multiplication.
     return torch.matmul(query, key.transpose(-2, -1))
 
-# Step 18 - scale_attention_scores (not yet solved)
-# TODO: implement
+# Step 18 - scale_attention_scores
+import torch
+import math
+
+def scale_attention_scores(scores, d_k):
+    # Scale the scores by the square root of the key dimension.
+    return scores / math.sqrt(d_k)
 
 # Step 19 - mask_attention_scores_with_neg_inf (not yet solved)
 # TODO: implement
