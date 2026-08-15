@@ -1098,8 +1098,61 @@ def compute_batch_training_loss(src_batch, tgt_batch, model_params, config):
         pad_id
     )
 
-# Step 72 - run_training_step_with_backprop (not yet solved)
-# TODO: implement
+# Step 72 - run_training_step_with_backprop
+import torch
+
+def run_training_step_with_backprop(
+    src_batch,
+    tgt_batch,
+    parameter_list,
+    model_params,
+    optimizer_state,
+    step_number,
+    config
+):
+    """Run one training iteration: zero grads, forward, backward, Noam LR, Adam step.
+
+    Returns the scalar loss value for the step as a Python float.
+    """
+
+    # Clear gradients from the previous iteration.
+    zero_all_parameter_gradients(parameter_list)
+
+    # Compute the differentiable training loss.
+    loss = compute_batch_training_loss(
+        src_batch,
+        tgt_batch,
+        model_params,
+        config
+    )
+
+    # Backpropagate through the complete Transformer.
+    loss.backward()
+
+    # Compute the Noam learning rate for this step.
+    learning_rate = compute_noam_learning_rate(
+        step_number,
+        config["d_model"],
+        config["warmup_steps"]
+    )
+
+    # Read optional Adam hyperparameters from config.
+    beta1 = config.get("beta1", 0.9)
+    beta2 = config.get("beta2", 0.98)
+    epsilon = config.get("epsilon", 1e-9)
+
+    # Apply one Adam update to all parameters.
+    apply_adam_step_to_all_parameters(
+        parameter_list,
+        optimizer_state,
+        learning_rate,
+        beta1,
+        beta2,
+        epsilon
+    )
+
+    # Return a Python float for logging.
+    return float(loss.detach().item())
 
 # Step 73 - run_training_loop_for_steps (not yet solved)
 # TODO: implement
