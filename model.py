@@ -134,8 +134,13 @@ def combine_padding_and_causal_masks(padding_mask, causal_mask):
     # Keep positions that satisfy both the padding and causal attention constraints.
     return padding_mask & causal_mask
 
-# Step 17 - compute_raw_attention_scores (not yet solved)
-# TODO: implement
+# Step 17 - compute_raw_attention_scores
+import torch
+
+def compute_raw_attention_scores(query, key):
+    """Compute raw attention scores Q @ K^T over the last two dimensions."""
+    # Transpose only the last two dimensions of key before matrix multiplication.
+    return torch.matmul(query, key.transpose(-2, -1))
 
 # Step 18 - scale_attention_scores (not yet solved)
 # TODO: implement
