@@ -24,8 +24,11 @@ def build_id_to_token_vocab(token_to_id):
     # Reverse the mapping so each token id points to its token.
     return {token_id: token for token, token_id in token_to_id.items()}
 
-# Step 3 - encode_sentence_to_ids (not yet solved)
-# TODO: implement
+# Step 3 - encode_sentence_to_ids
+def encode_sentence_to_ids(sentence, token_to_id, unk_token='<unk>'):
+    # Use the unknown-token id whenever a token is not in the vocabulary.
+    unk_id = token_to_id[unk_token]
+    return [token_to_id.get(token, unk_id) for token in sentence.split()]
 
 # Step 4 - decode_ids_to_tokens (not yet solved)
 # TODO: implement
