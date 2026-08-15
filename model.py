@@ -1254,6 +1254,22 @@ def mark_finished_beams(token_ids, finished_flags, end_token_id):
     # its newly generated token is the EOS token.
     return finished_flags | (token_ids == end_token_id)
 
-# Step 80 - select_best_finished_beam (not yet solved)
-# TODO: implement
+# Step 80 - select_best_finished_beam
+def select_best_finished_beam(finished_sequences, finished_scores, alpha):
+    normalized_scores = []
+
+    for sequence, score in zip(finished_sequences, finished_scores):
+        length = sequence.shape[0]
+        penalty = compute_length_penalty(length, alpha)
+        normalized_scores.append(float(score) / penalty)
+
+    best_index = max(
+        range(len(normalized_scores)),
+        key=lambda i: normalized_scores[i]
+    )
+
+    return {
+        "sequence": finished_sequences[best_index],
+        "score": normalized_scores[best_index],
+    }
 
