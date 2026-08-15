@@ -501,8 +501,16 @@ def apply_final_output_projection(decoder_output, output_projection_weight, outp
         output_projection_bias,
     )
 
-# Step 49 - tie_output_projection_to_token_embeddings (not yet solved)
-# TODO: implement
+# Step 49 - tie_output_projection_to_token_embeddings
+import torch
+
+def tie_output_projection_to_token_embeddings(token_embedding_weight):
+    """Return an output projection weight that shares storage with token_embedding_weight.
+
+    Input shape: (vocab_size, d_model). Output shape: (d_model, vocab_size).
+    """
+    
+    return token_embedding_weight.transpose(0, 1)
 
 # Step 50 - apply_log_softmax_over_vocab (not yet solved)
 # TODO: implement
