@@ -823,8 +823,14 @@ def shift_targets_right_with_start_token(target_ids, start_token_id):
 
     return shifted
 
-# Step 57 - compute_noam_learning_rate (not yet solved)
-# TODO: implement
+# Step 57 - compute_noam_learning_rate
+def compute_noam_learning_rate(step, d_model, warmup_steps):
+    # Increase the learning rate during warmup and decay it afterwards.
+    scale = d_model ** (-0.5)
+    warmup = step * (warmup_steps ** (-1.5))
+    decay = step ** (-0.5)
+
+    return float(scale * min(warmup, decay))
 
 # Step 58 - build_uniform_smoothing_distribution (not yet solved)
 # TODO: implement
