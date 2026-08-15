@@ -210,8 +210,13 @@ def transpose_heads_before_sequence(split_tensor):
     # Move the head dimension before the sequence dimension for attention.
     return split_tensor.transpose(1, 2)
 
-# Step 25 - merge_heads_back_to_model_dim (not yet solved)
-# TODO: implement
+# Step 25 - merge_heads_back_to_model_dim
+import torch
+
+def merge_heads_back_to_model_dim(multi_head_tensor):
+    # Move the sequence dimension before the head dimension, then merge both feature axes.
+    tensor = multi_head_tensor.transpose(1, 2)
+    return tensor.contiguous().reshape(tensor.shape[0], tensor.shape[1], -1)
 
 # Step 26 - apply_linear_projection (not yet solved)
 # TODO: implement
